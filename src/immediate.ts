@@ -4,7 +4,7 @@ const immediate = <
     Input = FlowInput,
     InputFlow extends Flow<Input> = Flow<Input>,
 >(flow: InputFlow): Flow<Input, Input> => {
-    const immediateFlow: Flow<Input, Input> = (input: Input): Input => {
+    const immediateFlow: Flow<Input, Input> = async (input: Input): Promise<Input> => {
         setImmediate(() => flow(input));
         return input;
     };

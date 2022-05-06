@@ -5,14 +5,14 @@ describe('Test immediate flow', () => {
     test('immediate - success', async () => {
         let hasBeenCalled = false;
 
-        const flow = immediate<{ value: number }, Flow<{ value: number }>>((input) => {
+        const flow = immediate<{ value: number }, Flow<{ value: number }>>(async (input) => {
             hasBeenCalled = true;
             expect(input.value).toStrictEqual(5);
 
             return input;
         });
 
-        flow({ value: 5 });
+        await flow({ value: 5 });
         await new Promise((resolve) => setImmediate(resolve));
 
         expect(hasBeenCalled).toBeTruthy();
