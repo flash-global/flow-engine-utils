@@ -16,7 +16,7 @@ const change = <
     Output extends Input = Input,
 > (path: Path, type: ChangeType, value: Expression | Path | any): Flow<Input, Output> => {
     if (type === ChangeType.JSONata) {
-        const changeFlow = (input: Input): Output => {
+        const changeFlow = async (input: Input): Promise<Output> => {
             const output: Input & { _globalContext?: object } = { ...input, _globalContext: globalContext.get() };
             objectPath.set(output, path, value.evaluate(output));
             delete output._globalContext;
@@ -29,7 +29,7 @@ const change = <
     }
 
     if (type === ChangeType.copy) {
-        const changeFlow = (input: Input): Output => {
+        const changeFlow = async (input: Input): Promise<Output> => {
             const output: Input & { _globalContext?: object } = { ...input, _globalContext: globalContext.get() };
             objectPath.set(output, path, clone(objectPath.get(output, value)));
             delete output._globalContext;
@@ -42,7 +42,7 @@ const change = <
     }
 
     if (type === ChangeType.deepCopy) {
-        const changeFlow = (input: Input): Output => {
+        const changeFlow = async (input: Input): Promise<Output> => {
             const output: Input & { _globalContext?: object } = { ...input, _globalContext: globalContext.get() };
             objectPath.set(output, path, cloneDeep(objectPath.get(output, value)));
             delete output._globalContext;
@@ -54,7 +54,7 @@ const change = <
         return changeFlow;
     }
 
-    const changeFlow = (input: Input): Output => {
+    const changeFlow = async (input: Input): Promise<Output> => {
         const output: Input & { _globalContext?: object } = { ...input, _globalContext: globalContext.get() };
         objectPath.set(output, path, value);
         delete output._globalContext;
